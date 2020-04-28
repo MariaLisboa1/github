@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 
+import Container from '../../Components/Container';
+
 import {
   Form,
   SubmitButton,
@@ -114,7 +116,7 @@ export default class Main extends Component {
     } = this.state;
 
     return (
-      <>
+      <Container>
         <h1>
           <FaGithubAlt />
           Usuários
@@ -131,7 +133,7 @@ export default class Main extends Component {
             onChange={this.handleInputChange}
           />
 
-          <SubmitButton loading={loading.toString()}>
+          <SubmitButton loading={loading}>
             {loading ? (
               <FaSpinner color="#FFF" size={14} />
             ) : (
@@ -174,7 +176,7 @@ export default class Main extends Component {
             </li>
           ))}
         </RepositoryList>
-      </>
+      </Container>
     );
   }
 }
