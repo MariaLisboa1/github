@@ -14,13 +14,14 @@ import {
   Button,
   RepositoryList,
   ErrorMessage,
+  ButtonLink,
 } from './styles';
 
 export default class Main extends Component {
   state = {
-    searchUser: '',
     owner: {},
     repositories: [],
+    users: [],
     loading: false,
     notFoundUser: false,
     visibleButtons: false,
@@ -29,17 +30,10 @@ export default class Main extends Component {
   };
 
   componentDidMount() {
-    // const repositories = localStorage.getItem('repositories');
-    // if (repositories) {
-    //   this.setState({ repositories: JSON.parse(repositories) });
-    // }
-  }
-
-  componentDidUpdate(_, prevState) {
-    // const { repositories } = this.state;
-    // if (prevState.repositories !== repositories) {
-    //   localStorage.setItem('repositories', JSON.stringify(repositories));
-    // }
+    const users = localStorage.getItem('users');
+    if (users) {
+      this.setState({ users: JSON.parse(users) });
+    }
   }
 
   order = (option) => {
@@ -58,7 +52,7 @@ export default class Main extends Component {
     repositories.sort(startingOrder.bind(this));
 
     this.setState({
-      repositories: repositories,
+      repositories,
     });
   };
 
@@ -73,34 +67,51 @@ export default class Main extends Component {
       this.setState({ loading: true });
 
       const { searchUser } = this.state;
-
-      if (searchUser) {
-        const response = await api.get(`/users/${searchUser}/repos`);
-
+      const response = await api.get(`/users/${searchUser}/repos`);
+      if (response) {
         this.setState({
           repositories: response.data,
           owner: response.data[0].owner,
           loading: false,
           visibleButtons: true,
+          notFoundUser: false,
+          fillOutForm: false,
+          messageErroForm: '',
         });
 
         this.order('descendingOrder');
-      } else {
-        this.setState({
-          loading: false,
-          notFoundUser: true,
-          fillOutForm: true,
-          messageErroForm: 'Preencha um usuário',
-        });
+        this.saveUserStorage();
+
+        return;
       }
+      this.sendMessageErro('Preencha um usuário');
     } catch (error) {
-      this.setState({
-        loading: false,
-        notFoundUser: true,
-        fillOutForm: true,
-        messageErroForm: 'Usuário não encontrado',
-      });
+      this.sendMessageErro('Usuário não encontrado');
     }
+  };
+
+  sendMessageErro = (messageErroForm) => {
+    this.setState({
+      loading: false,
+      notFoundUser: true,
+      fillOutForm: true,
+      messageErroForm,
+    });
+  };
+
+  saveUserStorage = () => {
+    const { owner, users } = this.state;
+
+    const hasUser = users.find((user) => user.login === owner.login);
+
+    if (hasUser || users.length > 4) return;
+
+    this.setState({
+      users: [...users, owner],
+    });
+
+    const useStorage = this.state.users;
+    localStorage.setItem('users', JSON.stringify(useStorage));
   };
 
   render() {
@@ -142,8 +153,12 @@ export default class Main extends Component {
           </SubmitButton>
         </Form>
 
+        <ButtonLink>
+          <Link to="/latestSearches">Ir para os 5 mais buscados</Link>
+        </ButtonLink>
+
         <ErrorMessage>
-          <p>{messageErroForm}</p>
+          {notFoundUser || fillOutForm ? <p>{messageErroForm}</p> : ''}
         </ErrorMessage>
 
         <Owner>
