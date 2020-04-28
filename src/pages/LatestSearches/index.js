@@ -3,7 +3,7 @@ import { FaGithubAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Container from '../../Components/Container';
 
-import { UsersList, ErrorMessage, Owner } from './styles';
+import { UsersList, ErrorMessage } from './styles';
 
 export default class LatestSearches extends Component {
   state = {
@@ -17,21 +17,20 @@ export default class LatestSearches extends Component {
   };
 
   componentDidMount() {
-    // ASSIM QUE CARREGA
-    const users = localStorage.getItem('users');
+    let users = JSON.parse(localStorage.getItem('users'));
+
     if (users) {
-      if (users.length > 0) {
-        this.setState({ users: JSON.parse(users) });
-        return;
-      }
-      this.setState({ users: [JSON.parse(users)] });
+      users = users.sort((a, b) =>
+        a.repositoryCount < b.repositoryCount ? -1 : 1,
+      );
+
+      this.setState({ users: users });
+      return;
     }
 
     this.setState({
       messageErroForm: 'Você não tem buscado usuarios',
     });
-
-    console.log(users);
   }
 
   render() {
@@ -50,12 +49,14 @@ export default class LatestSearches extends Component {
         </ErrorMessage>
 
         <UsersList>
-          {users.map((user) => (
+          {users.map((user, index) => (
             <li key={String(user.login)}>
               <img src={user.avatar_url} alt={user.login} />
               <div>
                 <strong>
-                  <a href={user.html_url}>{user.login}</a>
+                  <a href={user.html_url}>
+                    {user.login} {index + 1}º
+                  </a>
                 </strong>
                 {/* <p>{user.description}</p> */}
               </div>
