@@ -185,6 +185,13 @@ export default class Main extends Component {
               <div>
                 <strong>
                   <a href={repository.html_url}>{repository.name}</a>
+                  <Link
+                    to={`/repository/${encodeURIComponent(
+                      `${owner.login + '/' + repository.name}`,
+                    )}`}
+                  >
+                    Detalhes
+                  </Link>
                 </strong>
                 <p>{repository.description}</p>
               </div>
