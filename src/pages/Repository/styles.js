@@ -1,71 +1,37 @@
-import styled, { keyframes, css } from 'styled-components';
+import styled from 'styled-components';
 
-export const Form = styled.form`
-  margin-top: 30px;
-  display: flex;
-  flex-direction: row;
-  input {
-    flex: 1;
-    border: ${(props) =>
-      props.notFoundUser ? '1px solid red' : '1px solid #eee'};
-    padding: 10px 15px;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-`;
-
-const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-export const SubmitButton = styled.button.attrs((props) => ({
-  type: 'submit',
-  disabled: props.loading,
-}))`
-  background: #7159c1;
-  border: 0;
-  padding: 0 15px;
-  margin-left: 10px;
-  border-radius: 4px;
+export const Loading = styled.div`
+  color: #fff;
+  font-size: 30px;
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  &[disabled] {
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
-  ${(props) =>
-    props.loading &&
-    css`
-      svg {
-        animation: ${rotate} 2s linear infinite;
-      }
-    `}
+  height: 100vh;
 `;
 
 export const Owner = styled.header`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   a {
     color: #7159c1;
     font-size: 16px;
     text-decoration: none;
   }
+
   img {
     width: 120px;
     border-radius: 50%;
     margin-top: 20px;
   }
+
   h1 {
     font-size: 24px;
     margin-top: 10px;
   }
+
   p {
     margin-top: 5px;
     font-size: 14px;
@@ -76,7 +42,7 @@ export const Owner = styled.header`
   }
 `;
 
-export const RepositoryList = styled.ul`
+export const IssueList = styled.ul`
   padding-top: 30px;
   margin-top: 30px;
   border-top: 1px solid #eee;
@@ -105,8 +71,6 @@ export const RepositoryList = styled.ul`
 
       strong {
         font-size: 16px;
-        display: flex;
-        justify-content: space-between;
 
         a {
           text-decoration: none;
@@ -114,15 +78,6 @@ export const RepositoryList = styled.ul`
 
           &:hover {
             color: #7159c1;
-          }
-        }
-
-        a + a {
-          color: #7159c1;
-          font-size: 14px;
-
-          &:hover {
-            color: #401cb8;
           }
         }
 
@@ -146,6 +101,8 @@ export const RepositoryList = styled.ul`
     }
   }
 `;
+
+export const NotHaveIssue = styled.div``;
 
 export const ButtonList = styled.div`
   display: flex;
@@ -174,15 +131,4 @@ export const Button = styled.button.attrs((props) => ({
     cursor: not-allowed;
     opacity: 0.6;
   }
-`;
-
-export const ErrorMessage = styled.div`
-  color: red;
-  text-align: center;
-`;
-
-export const ButtonLink = styled.div`
-  margin-top: 10px;
-
-  text-align: center;
 `;
