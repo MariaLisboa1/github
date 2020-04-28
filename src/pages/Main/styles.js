@@ -169,3 +169,9 @@ export const ErrorMessage = styled.div`
   color: red;
   text-align: center;
 `;
+
+export const ButtonLink = styled.div`
+  margin-top: 10px;
+
+  text-align: center;
+`;
