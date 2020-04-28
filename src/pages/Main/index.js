@@ -11,6 +11,7 @@ import {
   ButtonList,
   Button,
   RepositoryList,
+  ErrorMessage,
 } from './styles';
 
 export default class Main extends Component {
@@ -21,6 +22,8 @@ export default class Main extends Component {
     loading: false,
     notFoundUser: false,
     visibleButtons: false,
+    fillOutForm: false,
+    messageErroForm: '',
   };
 
   componentDidMount() {
@@ -69,20 +72,31 @@ export default class Main extends Component {
 
       const { searchUser } = this.state;
 
-      const response = await api.get(`/users/${searchUser}/repos`);
+      if (searchUser) {
+        const response = await api.get(`/users/${searchUser}/repos`);
 
-      this.setState({
-        repositories: response.data,
-        owner: response.data[0].owner,
-        loading: false,
-        visibleButtons: true,
-      });
+        this.setState({
+          repositories: response.data,
+          owner: response.data[0].owner,
+          loading: false,
+          visibleButtons: true,
+        });
 
-      this.order('descendingOrder');
+        this.order('descendingOrder');
+      } else {
+        this.setState({
+          loading: false,
+          notFoundUser: true,
+          fillOutForm: true,
+          messageErroForm: 'Preencha um usuário',
+        });
+      }
     } catch (error) {
       this.setState({
         loading: false,
         notFoundUser: true,
+        fillOutForm: true,
+        messageErroForm: 'Usuário não encontrado',
       });
     }
   };
@@ -95,6 +109,8 @@ export default class Main extends Component {
       loading,
       notFoundUser,
       visibleButtons,
+      messageErroForm,
+      fillOutForm,
     } = this.state;
 
     return (
@@ -104,7 +120,10 @@ export default class Main extends Component {
           Usuários
         </h1>
 
-        <Form onSubmit={this.handleSubmit} notFoundUser={notFoundUser}>
+        <Form
+          onSubmit={this.handleSubmit}
+          notFoundUser={notFoundUser || fillOutForm}
+        >
           <input
             type="text"
             placeholder="Buscar usuário"
@@ -112,7 +131,7 @@ export default class Main extends Component {
             onChange={this.handleInputChange}
           />
 
-          <SubmitButton loading={loading}>
+          <SubmitButton loading={loading.toString()}>
             {loading ? (
               <FaSpinner color="#FFF" size={14} />
             ) : (
@@ -120,6 +139,10 @@ export default class Main extends Component {
             )}
           </SubmitButton>
         </Form>
+
+        <ErrorMessage>
+          <p>{messageErroForm}</p>
+        </ErrorMessage>
 
         <Owner>
           <img src={owner.avatar_url} />

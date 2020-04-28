@@ -164,3 +164,8 @@ export const Button = styled.button.attrs((props) => ({
     opacity: 0.6;
   }
 `;
+
+export const ErrorMessage = styled.div`
+  color: red;
+  text-align: center;
+`;
