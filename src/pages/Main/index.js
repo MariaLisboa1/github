@@ -68,10 +68,13 @@ export default class Main extends Component {
 
       const { searchUser } = this.state;
       const response = await api.get(`/users/${searchUser}/repos`);
+      const owner = response.data[0].owner;
+      owner.repositoryCount = response.data.length || 0;
+
       if (response) {
         this.setState({
           repositories: response.data,
-          owner: response.data[0].owner,
+          owner,
           loading: false,
           visibleButtons: true,
           notFoundUser: false,
@@ -103,14 +106,16 @@ export default class Main extends Component {
     const { owner, users } = this.state;
 
     const hasUser = users.find((user) => user.login === owner.login);
+    if (hasUser) return;
 
-    if (hasUser || users.length > 4) return;
+    if (users.length === 5) users.shift();
 
     this.setState({
       users: [...users, owner],
     });
 
     const useStorage = this.state.users;
+
     localStorage.setItem('users', JSON.stringify(useStorage));
   };
 
