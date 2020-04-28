@@ -108,7 +108,7 @@ export default class Main extends Component {
     const hasUser = users.find((user) => user.login === owner.login);
     if (hasUser) return;
 
-    if (users.length === 5) users.pop();
+    if (users.length === 5) users.shift();
 
     this.setState({
       users: [...users, owner],

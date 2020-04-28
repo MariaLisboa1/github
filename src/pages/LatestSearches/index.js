@@ -21,7 +21,7 @@ export default class LatestSearches extends Component {
 
     if (users) {
       users = users.sort((a, b) =>
-        a.repositoryCount < b.repositoryCount ? -1 : 1,
+        a.repositoryCount > b.repositoryCount ? -1 : 1,
       );
 
       this.setState({ users: users });
