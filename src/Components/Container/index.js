@@ -18,6 +18,14 @@ const Container = styled.div`
       margin-right: 10px;
     }
   }
+
+  @media (min-width: 481px) and (max-width: 767px) {
+    max-width: 400px;
+  }
+
+  @media (min-width: 320px) and (max-width: 480px) {
+    max-width: 320px;
+  }
 `;
 
 export default Container;

@@ -102,7 +102,14 @@ export const IssueList = styled.ul`
   }
 `;
 
-export const NotHaveIssue = styled.div``;
+export const NotHaveIssue = styled.div`
+  p {
+    text-align: center;
+    margin-top: 10px;
+    color: red;
+    font-weight: bold;
+  }
+`;
 
 export const ButtonList = styled.div`
   display: flex;

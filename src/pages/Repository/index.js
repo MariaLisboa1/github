@@ -112,39 +112,52 @@ export default class Repository extends Component {
           <p>{repository.description}</p>
         </Owner>
 
-        <ButtonList>
-          <Button onClick={() => this.handleState('all')}>Todas</Button>
-          <Button onClick={() => this.handleState('open')}>Aberta</Button>
-          <Button onClick={() => this.handleState('closed')}>Fechadas</Button>
-        </ButtonList>
+        {issues.length !== 0 ? (
+          <ButtonList>
+            <Button onClick={() => this.handleState('all')}>Todas</Button>
+            <Button onClick={() => this.handleState('open')}>Aberta</Button>
+            <Button onClick={() => this.handleState('closed')}>Fechadas</Button>
+          </ButtonList>
+        ) : (
+          ''
+        )}
 
         <NotHaveIssue>
           {issues.length === 0 ? <p>Não possui issues.</p> : ''}
         </NotHaveIssue>
 
-        <IssueList>
-          {issues.map((issue) => (
-            <li key={String(issue.id)}>
-              <img src={issue.user.avatar_url} alt={issue.user.login} />
-              <div>
-                <strong>
-                  <a href={issue.html_url}>{issue.title}</a>
-                  {issue.labels.map((label) => (
-                    <span key={String(label.id)}>{label.name}</span>
-                  ))}
-                </strong>
-                <p>{issue.user.login}</p>
-              </div>
-            </li>
-          ))}
-        </IssueList>
+        {issues.length !== 0 ? (
+          <>
+            <IssueList>
+              {issues.map((issue) => (
+                <li key={String(issue.id)}>
+                  <img src={issue.user.avatar_url} alt={issue.user.login} />
+                  <div>
+                    <strong>
+                      <a href={issue.html_url}>{issue.title}</a>
+                      {issue.labels.map((label) => (
+                        <span key={String(label.id)}>{label.name}</span>
+                      ))}
+                    </strong>
+                    <p>{issue.user.login}</p>
+                  </div>
+                </li>
+              ))}
+            </IssueList>
 
-        <ButtonList>
-          <Button lastPage={lastPage} onClick={() => this.handlePage(page - 1)}>
-            Anterior
-          </Button>
-          <Button onClick={() => this.handlePage(page + 1)}>Próxima</Button>
-        </ButtonList>
+            <ButtonList>
+              <Button
+                lastPage={lastPage}
+                onClick={() => this.handlePage(page - 1)}
+              >
+                Anterior
+              </Button>
+              <Button onClick={() => this.handlePage(page + 1)}>Próxima</Button>
+            </ButtonList>
+          </>
+        ) : (
+          ''
+        )}
       </Container>
     );
   }
